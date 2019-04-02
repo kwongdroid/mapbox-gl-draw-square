@@ -1,16 +1,16 @@
 ## Mapbox GL Draw Square
 
-This is a custom mode for Mapbox GL Draw that adds the functionality to draw square
+一个自定义mode，是对官方插件[mapbox-gl-draw.js](https://github.com/mapbox/mapbox-gl-draw)的一个补充，它实现了绘制正方形的能力
 
-### Install
+### 安装
 
 `yarn add mapbox-gl-draw-square`
 
-### Demo 
+### 示例 
 
+todo
 
-
-### Usage
+### 用法
 
 ```js
 import DrawSquare from 'mapbox-gl-draw-square';
@@ -25,13 +25,10 @@ const draw = new MapboxDraw({
 draw.changeMode('draw_square');
 ```
 
-Once a square is created, 1 event is fired:
-- `draw.create` with the created square
+### 构建
 
-### Build
+`yarn build` 
 
-`yarn build` will do it.
-
-### License
+### 许可
 
 MIT
