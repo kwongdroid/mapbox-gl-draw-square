@@ -58,8 +58,8 @@ const DrawSquare = {
         // 更改为simple_select模式
         if (
             state.startPoint &&
-            state.startPoint[0] !== state.endPoint[0] &&
-            state.startPoint[1] !== state.endPoint[1]
+            state.startPoint[0] !== e.lngLat.lng &&
+            state.startPoint[1] !== e.lngLat.lat
         ) {
             this.updateUIClasses({mouse: "pointer"});
             this.changeMode("simple_select", {featuresId: state.square.id});
@@ -70,23 +70,13 @@ const DrawSquare = {
     onMouseMove: function (state, e) {
         // 如果是startPoint，更新要素坐标，使用边界框概念
         // 使用startPoint坐标和当前鼠标位置坐标来动态计算边界框
-        // 通过将地理坐标转行列坐标，计算两点行列差值的最大值作为正方形的边长，操作体验更好
+        // 将经度跨度和纬度跨度的最大值作为正方形的边长，操作体验更好
         if (state.startPoint) {
-            let start = this.map.transform.locationCoordinate({
-                lng: state.startPoint[0],
-                lat: state.startPoint[1]
-            });
-            const end = this.map.transform.locationCoordinate({
-                lng: e.lngLat.lng,
-                lat: e.lngLat.lat
-            });
-
-            const length = Math.max(Math.abs(end.column - start.column), Math.abs(end.row - start.row));
-            start.column += length * (end.column - start.column > 0 ? 1 : -1);
-            start.row += length * (end.row - start.row > 0 ? 1 : -1);
-
-            const endPoint = this.map.transform.coordinateLocation(start);
-            state.endPoint = [endPoint.lng, endPoint.lat];
+            const xLength = e.lngLat.lng - state.startPoint[0];
+            const yLength = e.lngLat.lat - state.startPoint[1];
+            const sideLength = Math.max(Math.abs(xLength), Math.abs(yLength));
+            const lng = state.startPoint[0] + sideLength * (xLength > 0 ? 1 : -1);
+            const lat = state.startPoint[1] + sideLength * (yLength > 0 ? 1 : -1);
 
             state.square.updateCoordinate(
                 "0.0",
@@ -95,18 +85,18 @@ const DrawSquare = {
             ); //minX, minY - 起点
             state.square.updateCoordinate(
                 "0.1",
-                state.endPoint[0],
+                lng,
                 state.startPoint[1]
             ); // maxX, minY
             state.square.updateCoordinate(
                 "0.2",
-                state.endPoint[0],
-                state.endPoint[1]
+                lng,
+                lat
             ); // maxX, maxY
             state.square.updateCoordinate(
                 "0.3",
                 state.startPoint[0],
-                state.endPoint[1]
+                lat
             ); // minX,maxY
             state.square.updateCoordinate(
                 "0.4",
