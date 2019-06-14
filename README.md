@@ -19,7 +19,7 @@ const modes = MapboxDraw.modes;
 modes.draw_square = DrawSquare;
 
 const draw = new MapboxDraw({
-  modes: modes
+  modes
 });
 
 draw.changeMode('draw_square');
